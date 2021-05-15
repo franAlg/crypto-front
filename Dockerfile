@@ -22,5 +22,5 @@ RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-
 
 RUN poetry install --no-dev
 
-EXPOSE 8501
-CMD streamlit run ./crypto_front/app.py
+EXPOSE 80
+CMD streamlit run ./crypto_front/app.py --server.port 80
