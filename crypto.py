@@ -1,17 +1,20 @@
 import requests
 import datetime
+import os
 import json
 import pandas as pd
 
 # Lista negra de Tokens con los que no operar. Descartaremos los stablecoin.
 TOKEN_BLACKLIST = ["usd", "tether", "dai", "usd-coin", "binance-usd"]
 
+AUTH_HEADER = {"Authorization": f"Bearer {os.getenv('COINCAP_API_KEY')}"}
+
 
 def get_token_symbol(token: str):
     response = requests.request(
         "GET",
         f"http://api.coincap.io/v2/assets/{token}",
-        headers={},
+        headers=AUTH_HEADER,
     )
     data = response.json()
     data = data["data"]
@@ -20,9 +23,9 @@ def get_token_symbol(token: str):
 
 def get_top_crypto(rank: int = 12, market_cap_limit: int = 1500000000):
     response = requests.request(
-        "GET", "http://api.coincap.io/v2/assets", headers={}, json={"offset": 0}
+        "GET", "http://api.coincap.io/v2/assets", headers=AUTH_HEADER, json={"offset": 0}
     )
-    data = json.loads(response.text)
+    data = response.json()
     df_data = pd.json_normalize(data["data"])
     df_data = df_data[~df_data["id"].isin(TOKEN_BLACKLIST)]
     df_data["marketCapUsd"] = df_data["marketCapUsd"].astype("float")
@@ -52,7 +55,7 @@ def get_price_changes(df, timeframe: int = 12, sort: bool = True):
         response = requests.request(
             "GET",
             price_url.format(token, last_6hours_timestamp, actual_timestamp),
-            headers={},
+            headers=AUTH_HEADER,
         )
         data = response.json()
         df_data_value = pd.json_normalize(data["data"])
