@@ -4,10 +4,12 @@ import os
 import json
 import pandas as pd
 
+import streamlit as st
+
 # Lista negra de Tokens con los que no operar. Descartaremos los stablecoin.
 TOKEN_BLACKLIST = ["usd", "tether", "dai", "usd-coin", "binance-usd"]
 
-AUTH_HEADER = {"Authorization": f"Bearer {os.getenv('COINCAP_API_KEY')}"}
+AUTH_HEADER = {"Authorization": f"Bearer {os.getenv('COINCAP_API_KEY', st.secrets['COINCAP_API_KEY'])}"}
 
 
 def get_token_symbol(token: str):
