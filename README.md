@@ -2,7 +2,7 @@
 
 Crypto Rocket allows you to get latest coin pumps to detect crypto market momentum.
 
-## Installation
+## Setup
 
 1. `python -m venv venv `
 2. `source venv/bin/activate`
