@@ -3,7 +3,7 @@ import os
 import numpy as np
 import streamlit as st
 
-from crypto_front.crypto import (
+from crypto import (
     get_top_crypto,
     get_price_changes,
     get_token_symbol,

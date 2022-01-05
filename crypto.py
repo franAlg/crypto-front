@@ -12,17 +12,15 @@ def get_token_symbol(token: str):
         "GET",
         f"http://api.coincap.io/v2/assets/{token}",
         headers={},
-        data={},
     )
-    text = response.text
-    data = json.loads(text)
+    data = response.json()
     data = data["data"]
     return data["symbol"]
 
 
 def get_top_crypto(rank: int = 12, market_cap_limit: int = 1500000000):
     response = requests.request(
-        "GET", "http://api.coincap.io/v2/assets", headers={}, data={"offset": 0}
+        "GET", "http://api.coincap.io/v2/assets", headers={}, json={"offset": 0}
     )
     data = json.loads(response.text)
     df_data = pd.json_normalize(data["data"])
@@ -55,10 +53,8 @@ def get_price_changes(df, timeframe: int = 12, sort: bool = True):
             "GET",
             price_url.format(token, last_6hours_timestamp, actual_timestamp),
             headers={},
-            data={},
         )
-        text = response.text
-        data = json.loads(text)
+        data = response.json()
         df_data_value = pd.json_normalize(data["data"])
         df_data_value["priceUsd"] = df_data_value["priceUsd"].astype("float")
         first_datapoint = df_data_value.iloc[0]["priceUsd"]
